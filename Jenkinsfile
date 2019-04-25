@@ -34,13 +34,13 @@ pipeline {
             sh "make linux"
             // Do a skaffold (docker) build
             // @todo - withEnv() to put these vars in the shell env
-            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml"
+            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold_frontend.yaml"
             // Post build image - assuming we push here
             sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION"
           }
           // Make a preview environemnt
           dir("${env.APP_DIR}/charts/preview") {
-            sh "make preview"
+            sh "make preview_frontend"
             sh "jx preview --app $APP_NAME --dir ../.."
           }
         }
