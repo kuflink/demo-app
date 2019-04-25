@@ -66,14 +66,12 @@ pipeline {
 
             sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold_frontend.yaml"
 
-
-
             // Post build image - assuming we push here
             sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$FRONTEND_APP_NAME:$PREVIEW_VERSION"
           }
 
           // Make a preview environemnt
-          dir("${env.APP_DIR}/charts/preview") {
+          dir("${env.APP_DIR}/charts/frontend_app") {
             sh "make preview_frontend"
             sh "jx preview --app $FRONTEND_APP_NAME --dir ../.."
           }
