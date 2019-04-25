@@ -52,14 +52,14 @@ pipeline {
           // @todo - make nginx container
           // @todo - make api/admin ? container
 
-          dir(env.APP_DIR) {
+          dir('/home/jenkins/go/src/github.com/kuflink/demo-app') {
             // @todo - find out what checkout scm does in this specific context (dir)
             checkout scm
 
             // @todo - withEnv() to put these vars in the shell env
             // Do a skaffold (docker) build
             // @todo - figure out how skaffold's "docker: {}" section can be customised to use a different Dockerfile path. (for frontendapp)
-            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold/skaffold_frontend.yaml"
+            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold/skaffold.yaml"
 
             // @todo - composer install here - re-using the image
 

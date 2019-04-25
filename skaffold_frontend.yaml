@@ -2,7 +2,7 @@ apiVersion: skaffold/v1beta2
 kind: Config
 build:
   artifacts:
-  - image: changeme-frontend
+  - image: frontend-app
     context: .
     docker: {}
   tagPolicy:
