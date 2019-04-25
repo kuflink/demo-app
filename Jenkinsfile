@@ -47,7 +47,7 @@ pipeline {
 
         // @todo - make this container template inside of jenkins
         // container('php_72') {
-        container('nginx') {
+        container('go') {
           // @todo - make PHP container
           // @todo - make nginx container
           // @todo - make api/admin ? container
