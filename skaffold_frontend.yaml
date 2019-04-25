@@ -4,7 +4,8 @@ build:
   artifacts:
   - image: frontend-app
     context: .
-    docker: {}
+    docker:
+      dockerfile: frontend.app.Dockerfile
   tagPolicy:
     envTemplate:
       template: '{{.DOCKER_REGISTRY}}/kuflink/frontend-app:{{.VERSION}}'
