@@ -25,7 +25,7 @@ profiles:
     helm:
       releases:
       - name: frontend-app
-        chartPath: charts/frontend-app
+        chartPath: charts/frontend_app
         setValueTemplates:
           image.repository: '{{.DOCKER_REGISTRY}}/kuflink/frontend-app'
           image.tag: '{{.DIGEST_HEX}}'
