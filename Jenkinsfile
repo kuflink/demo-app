@@ -27,14 +27,14 @@ pipeline {
           // @todo - make api/admin ? container
 
           // Build the GO app
-          dir('/home/jenkins/go/src/github.com/kuflink/demo-app') {
+          dir(env.APP_DIR) {
             // @todo - find out what checkout scm does
             checkout scm
             // Make the GO app on linux distry
             sh "make linux"
             // Do a skaffold (docker) build
             // @todo - withEnv() to put these vars in the shell env
-            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold/skaffold.yaml"
+            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml"
             // Post build image - assuming we push here
             sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION"
           }
