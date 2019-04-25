@@ -1,30 +1,31 @@
+
 apiVersion: skaffold/v1beta2
 kind: Config
 build:
   artifacts:
-  - image: changeme-frontend
+  - image: changeme
     context: .
     docker: {}
   tagPolicy:
     envTemplate:
-      template: '{{.DOCKER_REGISTRY}}/kuflink/frontend-app:{{.VERSION}}'
+      template: '{{.DOCKER_REGISTRY}}/kuflink/demo-app:{{.VERSION}}'
   local: {}
 deploy:
   kubectl: {}
 profiles:
-- name: dev_frontend
+- name: dev
   build:
     artifacts:
     - docker: {}
     tagPolicy:
       envTemplate:
-        template: '{{.DOCKER_REGISTRY}}/kuflink/frontend-app:{{.DIGEST_HEX}}'
+        template: '{{.DOCKER_REGISTRY}}/kuflink/demo-app:{{.DIGEST_HEX}}'
     local: {}
   deploy:
     helm:
       releases:
-      - name: frontend-app
-        chartPath: charts/frontend-app
+      - name: demo-app
+        chartPath: charts/demo-app
         setValueTemplates:
-          image.repository: '{{.DOCKER_REGISTRY}}/kuflink/frontend-app'
+          image.repository: '{{.DOCKER_REGISTRY}}/kuflink/demo-app'
           image.tag: '{{.DIGEST_HEX}}'
