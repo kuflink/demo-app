@@ -16,7 +16,7 @@ pipeline {
       }
       environment {
         PREVIEW_VERSION = "0.0.0-$BRANCH_NAME-$BUILD_NUMBER"
-        PREVIEW_NAMESPACE = "$APP_NAME-$BRANCH_NAME".toLowerCase()
+        PREVIEW_NAMESPACE = "$FRONTEND_APP_NAME-$BRANCH_NAME".toLowerCase()
         HELM_RELEASE = "$PREVIEW_NAMESPACE".toLowerCase()
 
       }
@@ -59,9 +59,14 @@ pipeline {
             // @todo - withEnv() to put these vars in the shell env
             // Do a skaffold (docker) build
             // @todo - figure out how skaffold's "docker: {}" section can be customised to use a different Dockerfile path. (for frontendapp)
-            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold_frontend.yaml"
 
             // @todo - composer install here - re-using the image
+            // Make the GO app on linux distry
+            sh "make linux"
+
+            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold_frontend.yaml"
+
+
 
             // Post build image - assuming we push here
             sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$FRONTEND_APP_NAME:$PREVIEW_VERSION"
