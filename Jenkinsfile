@@ -59,7 +59,7 @@ pipeline {
             // @todo - withEnv() to put these vars in the shell env
             // Do a skaffold (docker) build
             // @todo - figure out how skaffold's "docker: {}" section can be customised to use a different Dockerfile path. (for frontendapp)
-            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold/skaffold.yaml"
+            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold_frontend.yaml"
 
             // @todo - composer install here - re-using the image
 
@@ -94,7 +94,7 @@ pipeline {
             sh "echo \$(jx-release-version) > VERSION"
             sh "jx step tag --version \$(cat VERSION)"
             sh "make build"
-            sh "export VERSION=`cat VERSION` && skaffold build -f skaffold/skaffold.yaml"
+            sh "export VERSION=`cat VERSION` && skaffold build -f skaffold.yaml"
             sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:\$(cat VERSION)"
           }
         }
@@ -114,7 +114,7 @@ pipeline {
 
             // @todo - composer install here - re-using the image
 
-            sh "export VERSION=`cat VERSION` && skaffold build -f skaffold/skaffold_frontend.yaml"
+            sh "export VERSION=`cat VERSION` && skaffold build -f skaffold_frontend.yaml"
             sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$FRONTEND_APP_NAME:\$(cat VERSION)"
           }
         }
