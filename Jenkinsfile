@@ -71,7 +71,7 @@ pipeline {
           }
 
           // Make a preview environemnt
-          dir("${env.APP_DIR}/charts/frontend_app") {
+          dir("${env.APP_DIR}/charts/preview_frontend") {
             sh "make preview_frontend"
             sh "jx preview --app $FRONTEND_APP_NAME --dir ../.."
           }
