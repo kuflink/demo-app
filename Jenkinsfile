@@ -21,61 +21,61 @@ pipeline {
 
       }
       steps {
-        // container('go') {
-        //   // @todo - make PHP container
-        //   // @todo - make nginx container
-        //   // @todo - make api/admin ? container
-        //
-        //   // Build the GO app
-        //   dir('/home/jenkins/go/src/github.com/kuflink/demo-app') {
-        //     // @todo - find out what checkout scm does
-        //     checkout scm
-        //     // Make the GO app on linux distry
-        //     sh "make linux"
-        //     // Do a skaffold (docker) build
-        //     // @todo - withEnv() to put these vars in the shell env
-        //     sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold/skaffold.yaml"
-        //     // Post build image - assuming we push here
-        //     sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION"
-        //   }
-        //   // Make a preview environemnt
-        //   dir("${env.APP_DIR}/charts/preview") {
-        //     sh "make preview"
-        //     sh "jx preview --app $APP_NAME --dir ../.."
-        //   }
-        // }
-
-        // @todo - make this container template inside of jenkins
-        // container('php_72') {
         container('go') {
           // @todo - make PHP container
           // @todo - make nginx container
           // @todo - make api/admin ? container
 
+          // Build the GO app
           dir('/home/jenkins/go/src/github.com/kuflink/demo-app') {
-            // @todo - find out what checkout scm does in this specific context (dir)
+            // @todo - find out what checkout scm does
             checkout scm
-
-            // @todo - withEnv() to put these vars in the shell env
-            // Do a skaffold (docker) build
-            // @todo - figure out how skaffold's "docker: {}" section can be customised to use a different Dockerfile path. (for frontendapp)
-
-            // @todo - composer install here - re-using the image
             // Make the GO app on linux distry
             sh "make linux"
-
-            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold_frontend.yaml"
-
+            // Do a skaffold (docker) build
+            // @todo - withEnv() to put these vars in the shell env
+            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold/skaffold.yaml"
             // Post build image - assuming we push here
-            sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$FRONTEND_APP_NAME:$PREVIEW_VERSION"
+            sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION"
           }
-
           // Make a preview environemnt
           dir("${env.APP_DIR}/charts/preview") {
-            sh "make preview_frontend"
-            sh "jx preview --app $FRONTEND_APP_NAME --dir ../.."
+            sh "make preview"
+            sh "jx preview --app $APP_NAME --dir ../.."
           }
         }
+
+        // @todo - make this container template inside of jenkins
+        // container('php_72') {
+        // container('go') {
+        //   // @todo - make PHP container
+        //   // @todo - make nginx container
+        //   // @todo - make api/admin ? container
+        //
+        //   dir('/home/jenkins/go/src/github.com/kuflink/demo-app') {
+        //     // @todo - find out what checkout scm does in this specific context (dir)
+        //     checkout scm
+        //
+        //     // @todo - withEnv() to put these vars in the shell env
+        //     // Do a skaffold (docker) build
+        //     // @todo - figure out how skaffold's "docker: {}" section can be customised to use a different Dockerfile path. (for frontendapp)
+        //
+        //     // @todo - composer install here - re-using the image
+        //     // Make the GO app on linux distry
+        //     sh "make linux"
+        //
+        //     sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold_frontend.yaml"
+        //
+        //     // Post build image - assuming we push here
+        //     sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$FRONTEND_APP_NAME:$PREVIEW_VERSION"
+        //   }
+        //
+        //   // Make a preview environemnt
+        //   dir("${env.APP_DIR}/charts/preview") {
+        //     sh "make preview_frontend"
+        //     sh "jx preview --app $FRONTEND_APP_NAME --dir ../.."
+        //   }
+        // }
 
       }
     }
