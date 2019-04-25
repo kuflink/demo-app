@@ -21,29 +21,29 @@ pipeline {
 
       }
       steps {
-        container('go') {
-          // @todo - make PHP container
-          // @todo - make nginx container
-          // @todo - make api/admin ? container
-
-          // Build the GO app
-          dir('/home/jenkins/go/src/github.com/kuflink/demo-app') {
-            // @todo - find out what checkout scm does
-            checkout scm
-            // Make the GO app on linux distry
-            sh "make linux"
-            // Do a skaffold (docker) build
-            // @todo - withEnv() to put these vars in the shell env
-            sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold/skaffold.yaml"
-            // Post build image - assuming we push here
-            sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION"
-          }
-          // Make a preview environemnt
-          dir("${env.APP_DIR}/charts/preview") {
-            sh "make preview"
-            sh "jx preview --app $APP_NAME --dir ../.."
-          }
-        }
+        // container('go') {
+        //   // @todo - make PHP container
+        //   // @todo - make nginx container
+        //   // @todo - make api/admin ? container
+        //
+        //   // Build the GO app
+        //   dir('/home/jenkins/go/src/github.com/kuflink/demo-app') {
+        //     // @todo - find out what checkout scm does
+        //     checkout scm
+        //     // Make the GO app on linux distry
+        //     sh "make linux"
+        //     // Do a skaffold (docker) build
+        //     // @todo - withEnv() to put these vars in the shell env
+        //     sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold/skaffold.yaml"
+        //     // Post build image - assuming we push here
+        //     sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION"
+        //   }
+        //   // Make a preview environemnt
+        //   dir("${env.APP_DIR}/charts/preview") {
+        //     sh "make preview"
+        //     sh "jx preview --app $APP_NAME --dir ../.."
+        //   }
+        // }
 
         // @todo - make this container template inside of jenkins
         // container('php_72') {
